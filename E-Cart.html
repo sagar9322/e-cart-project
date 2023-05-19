@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-cart</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="form">
+            <label for="sp">Selling Price:</label>
+            <input type="number" name="name" id="sp">
+            <lable for="product">Product Name:</lable>
+            <input type="text" id="product" name="text">
+            <input type="button" onclick="addProduct(event)" id="btn" value="Add Product">
+        </form>
+    </div>
+    <div class="summary">
+        <h2>Products</h2>
+        <ul id="item-list">
+        </ul>
+    </div>
+    <div id="sum-div"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script src="E-Cart.js"></script>
+</body>
+
+</html>
