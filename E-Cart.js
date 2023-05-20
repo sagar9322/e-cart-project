@@ -8,32 +8,11 @@ function addProduct(event) {
         productname: product,
         sellingprice: sp
     }
-    let displayProduct = `Product-Name: ${product}, Selling-Price: ${sp}`;
 
     axios.post("https://crudcrud.com/api/be2cef7636ba4a62b452b32068ce83b7/product", productDetail)
         .then(() => {
             getDetail();
         })
-
-    let listItem = document.getElementById("item-list");
-    let li = document.createElement("li");
-    li.className = "list-item";
-    li.appendChild(document.createTextNode(displayProduct));
-
-    let deletebtn = document.createElement("button");
-    deletebtn.className = "delete-btn";
-    deletebtn.appendChild(document.createTextNode("Delete Product"));
-
-    deletebtn.onclick = (event) => {
-        event.preventDefault();
-        deleteFromServer(uniqId);
-        listItem.removeChild(li);
-    }
-    li.appendChild(deletebtn);
-    listItem.appendChild(li);
-
-    document.getElementById("sp").value = "";
-    document.getElementById("product").value = "";
 
 }
 
@@ -75,6 +54,9 @@ function getDetail() {
                 }
                 li.appendChild(deletebtn);
                 listItem.appendChild(li);
+
+                document.getElementById("sp").value = "";
+                document.getElementById("product").value = "";
 
             }
             updateSum(sum);
