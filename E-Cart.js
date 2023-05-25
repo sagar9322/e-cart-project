@@ -1,5 +1,4 @@
-
-function addProduct(event) {
+async function addProduct(event) {
     event.preventDefault();
     let sp = document.getElementById("sp").value;
     let product = document.getElementById("product").value;
@@ -9,58 +8,69 @@ function addProduct(event) {
         sellingprice: sp
     }
 
-    axios.post("https://crudcrud.com/api/be2cef7636ba4a62b452b32068ce83b7/product", productDetail)
-        .then(() => {
-            getDetail();
-        })
+    try {
+        await axios.post("https://crudcrud.com/api/d5b0b3a65df6489080c9674f2a70598e/product", productDetail)
+        getDetail();
+    } catch (error) {
+        console.error(error);
+    }
 
 }
 
-function deleteFromServer(uniqId) {
-    axios.delete(`https://crudcrud.com/api/be2cef7636ba4a62b452b32068ce83b7/product/${uniqId}`)
-        .then(() => {
-            getDetail();
-        })
+async function deleteFromServer(uniqId) {
+    try {
+        await axios.delete(`https://crudcrud.com/api/d5b0b3a65df6489080c9674f2a70598e/product/${uniqId}`)
+        getDetail();
+    } catch (error) {
+        console.error(error);
+    }
 
 
 }
 
-function getDetail() {
-    axios.get("https://crudcrud.com/api/be2cef7636ba4a62b452b32068ce83b7/product")
-        .then((res) => {
-            var listItem = document.getElementById('item-list');
-            listItem.innerHTML = ""; // Clear the current list
-            var sum = 0;
-            for (let i = 0; i < res.data.length; i++) {
-                const userDetail = res.data[i];
-                uniqId = res.data[i]['_id'];
-                sum += Number(res.data[i].sellingprice);
+async function getDetail() {
+    try {
+        const res = await axios.get("https://crudcrud.com/api/d5b0b3a65df6489080c9674f2a70598e/product");
+        var listItem = document.getElementById('item-list');
+        listItem.innerHTML = ""; // Clear the current list
+        var sum = 0;
+        for (let i = 0; i < res.data.length; i++) {
+            const userDetail = res.data[i];
+            uniqId = res.data[i]['_id'];
+            sum += Number(res.data[i].sellingprice);
 
-                let displayProduct = `Product-Name: ${userDetail.productname}, Selling-Price: ${userDetail.sellingprice}`;
+            let displayProduct = `Product-Name: ${userDetail.productname}, Selling-Price: ${userDetail.sellingprice}`;
 
-                let li = document.createElement("li");
-                li.className = "list-item";
-                li.appendChild(document.createTextNode(displayProduct));
+            let li = document.createElement("li");
+            li.className = "list-item";
+            li.appendChild(document.createTextNode(displayProduct));
 
-                let deletebtn = document.createElement("button");
-                deletebtn.className = "delete-btn";
-                deletebtn.appendChild(document.createTextNode("Delete Product"));
+            let deletebtn = document.createElement("button");
+            deletebtn.className = "delete-btn";
+            deletebtn.appendChild(document.createTextNode("Delete Product"));
 
-                deletebtn.onclick = (event) => {
+            function deleteList(li, uniqId, i) {
+                return (event) => {
                     event.preventDefault();
                     deleteFromServer(uniqId);
                     listItem.removeChild(li);
                     sum = sum - Number(res.data[i].sellingprice);
                 }
-                li.appendChild(deletebtn);
-                listItem.appendChild(li);
-
-                document.getElementById("sp").value = "";
-                document.getElementById("product").value = "";
-
             }
-            updateSum(sum);
-        })
+            deletebtn.onclick = deleteList(li, uniqId, i);
+
+
+            li.appendChild(deletebtn);
+            listItem.appendChild(li);
+
+            document.getElementById("sp").value = "";
+            document.getElementById("product").value = "";
+
+        }
+        updateSum(sum);
+    } catch (error) {
+        console.error(error);
+    }
 
 
 }
